@@ -2,7 +2,10 @@
 
 How to use:
 
-1. Install dependencies:  'npm install' or 'npm i'
+1. Install dependencies:  
+<code>npm install</code>
+or
+<code>npm i</code>
 
 2. Development:
 gulp
