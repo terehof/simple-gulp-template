@@ -7,8 +7,8 @@ How to use:
 or
 <code>npm i</code>
 
-2. Development:
-gulp
+2. Development:<br>
+<code>gulp<code>
 
 3. Production (with js/css minifying, with autoprefixer):
-gulp-prod
+<code>gulp-prod</code>
