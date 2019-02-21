@@ -1,19 +1,18 @@
 var gulp = require('gulp'),
     watch = require('gulp-watch'),
     autoprefixer = require('gulp-autoprefixer'),
-    uglify = require('gulp-uglify'),
     cssmin = require('gulp-cssmin'),
     jsmin = require('gulp-jsmin'),
     rigger = require('gulp-rigger'),
     rename = require('gulp-rename'),
     util = require('gulp-util'),
     sass = require('gulp-sass'),
+    replace = require('gulp-replace'),
     sourcemaps = require('gulp-sourcemaps'),
-    fileInclude = require('gulp-file-include');
-
-var historyApiFallback = require('connect-history-api-fallback');
-var browserSync = require('browser-sync').create();
-var reload = browserSync.reload;
+    fileInclude = require('gulp-file-include'),
+    historyApiFallback = require('connect-history-api-fallback'),
+    browserSync = require('browser-sync').create(),
+    reload = browserSync.reload;
 
 var path = {
     build: { //Тут мы укажем куда складывать готовые после сборки файлы
@@ -37,8 +36,7 @@ var path = {
         style: 'src/style/**/*.scss',
         img: 'src/img/**/*.*',
         fonts: 'src/fonts/**/*.*'
-    },
-    clean: './dist'
+    }
 };
 gulp.task('html', function () {
     return gulp.src(path.src.html)
@@ -55,14 +53,8 @@ gulp.task('fonts', function () {
         .pipe(reload({ stream:true }));
 });
 gulp.task('images', function() {
-    gulp.src(path.src.img) // возьмем наши картинки
-        .pipe(gulp.dest(path.build.img)) //И бросим в build
-        /*.pipe(imagemin({ //Сожмем их
-            progressive: true,
-            svgoPlugins: [{removeViewBox: false}],
-            use: [pngquant()],
-            interlaced: true
-        }))*/
+    gulp.src(path.src.img)
+        .pipe(gulp.dest(path.build.img))
         .pipe(reload({ stream:true }));
 });
 gulp.task('styles', function () {
@@ -71,6 +63,7 @@ gulp.task('styles', function () {
         .pipe(sass().on('error', sass.logError))
         .pipe(sourcemaps.write())
         .pipe(rename('style.css'))
+        .pipe(replace('../../', '../'))
         .pipe(gulp.dest(path.build.css))
         .pipe(reload({ stream:true }));
 });
@@ -95,7 +88,6 @@ gulp.task('js', function () {
 gulp.task('js-min', function () {
     return gulp.src(path.src.js)
         .pipe(rigger())
-        .pipe(uglify()).on('error', util.log)
         .pipe(jsmin())
         .pipe(gulp.dest(path.build.js))
         .pipe(reload({ stream:true }));
